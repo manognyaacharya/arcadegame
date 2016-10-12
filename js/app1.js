@@ -86,6 +86,12 @@ player.prototype.update = function(){
     if( this.y > 6*81){
        this.y = 5*81;
     }
+    if( this.x > 4*100){
+        this.x = 4*100;
+    }
+    if( this.x < 0){
+        this.x = 0;
+    }
 };
 player.prototype.render = function(){
     if(player.lives > 0){
