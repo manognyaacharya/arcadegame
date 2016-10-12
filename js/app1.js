@@ -28,20 +28,21 @@ Enemy.prototype.update = function(dt) {
         this.positionreset();
     }
     this.detectCollision();
+
 };
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    drawBox(this.x, this.y + 77, 100, 67, "yellow");
+    if(player.lives > 0){
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+        drawBox(this.x, this.y + 77, 100, 67, "yellow");
+    }
+    else{
+        document.getElementById("score").value = player.score;
+
+    }
+
 };
-//Enemy.prototype.detectCollision = function() {
-    //if (this.x < player.x + 101 && this.x + 101 > player.x && this.y < player.y + 65 && 65 + this.y > player.y){
-        //this.positionreset();
-        //console.log("collision");
-        //player.reset();
-    //}
-//};
 Enemy.prototype.detectCollision = function() {
     //console.log("inside collision function");
     var enemyBox = {x: this.x, y: this.y + 77, width: 100, height:67};
@@ -50,6 +51,8 @@ Enemy.prototype.detectCollision = function() {
     if (enemyBox.x < playerBox.x + playerBox.width && enemyBox.x + enemyBox.width > playerBox.x && enemyBox.y < playerBox.y + playerBox.height && enemyBox.height + enemyBox.y > playerBox.y) {
          this.positionreset();
          console.log("collision");
+         player.lives--;
+         document.getElementById("lives").value = player.lives;
          player.reset();
     }
 };
@@ -66,34 +69,11 @@ var player = function(x,y) {
     //postions of player can be anywere in a grid of 6x5 matrix
     this.x = x;
     this.y = y;
-    this.ct = 0;
+    this.score = 0;
+    this.lives = 5;
     this.sprite = 'images/char-boy.png';
     //this.score = 10;
-    this.gem = {
-        "gems" : [{
-            "rgn": 0,
-            "sprite":"images/Gem-Orange.png",
-            "gemrows" : [65, 150, 230],
-            "score": 10,
-            "xpos": [],
-            "ypos": []
-        }, {
-            "rgn": 0,
-            "sprite":"images/Gem-Green.png",
-            "gemrows" : [65, 150, 230],
-            "score": 20,
-            "xpos": [],
-            "ypos": []
-        }, {
-            "rgn": 0,
-            "sprite":"images/Gem-Blue.png",
-            "gemrows" : [65, 150, 230],
-            "score": 30,
-            "xpos": [],
-            "ypos": []
-        }
-    ]};
-    this.randomnumbergenerator();
+
 
     // /this.gems();
 };
@@ -101,36 +81,24 @@ var player = function(x,y) {
 player.prototype.update = function(){
     if( this.y < -81){
         this.y = 5*81;
-    this.randomnumbergenerator();
-
+        gemcl.randomnumbergenerator();
     }
     if( this.y > 6*81){
        this.y = 5*81;
     }
 };
-player.prototype.randomnumbergenerator = function() {
-        this.gem.gems.forEach( function(eachgem){
-            eachgem.rgn = ((Math.random() * 10) % 2);
-            console.log(eachgem.rgn);
-            for(var i=0; i < eachgem.rgn ; i++){
-               eachgem.xpos[i]=Math.floor((Math.random()*10 ) % 5) * 101;
-               eachgem.ypos[i]=eachgem.gemrows[Math.floor((Math.random()*10 ) % 3)];
-            }
-        });
-}
 player.prototype.render = function(){
-    ctx.drawImage(Resources.get(this.sprite), this.x , this.y );
-    drawBox(this.x + 16,this.y + 63,70 , 75,"yellow" );
-    this.gemplace();
+    if(player.lives > 0){
+        ctx.drawImage(Resources.get(this.sprite), this.x , this.y );
+        drawBox(this.x + 16,this.y + 63,70 , 75,"yellow" );
+        gemcl.gemplace();
+    }
+    else{
+        document.getElementById("gameover").value = "gameover";
+    }
+
 };
-player.prototype.gemplace = function() {
-    this.gem.gems.forEach( function(eachgem){
-        for (var t = 0; t < eachgem.rgn ;t++){
-            ctx.drawImage(Resources.get(eachgem.sprite), eachgem.xpos[t], eachgem.ypos[t]);
-            //ctx.drawImage(Resources.get(eachgem.sprite), eachgem.xpos[t], eachgem.ypos[t],50,100);
-        }
-    });
-}
+
 player.prototype.handleInput = function(key){
         if( key == 'left'){
             this.x = this.x - 100;
@@ -144,31 +112,95 @@ player.prototype.handleInput = function(key){
         else if (key == 'up'){
             this.y = this.y - 83;
         }
-        //check for gem collision only on input
         this.itemCollision();
 
 };
 player.prototype.itemCollision = function(){
     var playerBox = {x: player.x + 16 , y: player.y + 63 , width: 70, height: 75};
     //three gemboxes for three category of gems
-    this.gem.gems.forEach( function(eachgem){
+    var myobj = this;
+    gemcl.gem.gems.forEach( function(eachgem){
         for(var i=0; i < eachgem.rgn ; i++){
-            var gemBox = {x: eachgem.xpos[i], y: eachgem.ypos[i] + 0.33*171, width: 100, height:105};
+            //orginal gem height is 171 ie image height - blank space on top which is 33.33% of 171
+            var gemBox = {x: eachgem.xpos[i], y: eachgem.ypos[i] + 0.3*eachgem.spriteheight[i], width: eachgem.spritewidth[i], height: eachgem.spriteheight[i] - 0.33*eachgem.spriteheight[i]};
+            //drawBox(gemBox.x , gemBox.y, gemBox.width, gemBox.height, "yellow" );
             if (gemBox.x < playerBox.x + playerBox.width && gemBox.x + gemBox.width > playerBox.x && gemBox.y < playerBox.y + playerBox.height && gemBox.height + gemBox.y > playerBox.y) {
-                this.score = this.score + eachgem.score;
+                myobj.score = myobj.score + eachgem.score;
+                eachgem.xpos[i] = 600;
+                eachgem.ypos[i] = 600;
                 console.log("gem collision");
+                document.getElementById("score").value = player.score;
 
             }
         }
     });
+    console.log(myobj.score);
 };
 player.prototype.reset = function(){
     this.x = player_initialX;
     this.y = player_initialY;
 };
 
+var gem = function(){
 
-// Now instantiate your objects.
+this.gem = {
+    "gems" : [{
+    "rgn": 0,
+    "sprite":"images/Gem-Orange.png",
+    "spritewidth": [],
+    "spriteheight": [],
+    "gemrows" : [65, 150, 230],
+    "score": 10,
+    "xpos": [],
+    "ypos": []
+    }, {
+    "rgn": 0,
+    "sprite":"images/Gem-Green.png",
+    "spritewidth": [],
+    "spriteheight": [],
+    "score": 20,
+    "xpos": [],
+    "ypos": []
+    }, {
+    "rgn": 0,
+    "sprite":"images/Gem-Blue.png",
+    "spritewidth": [],
+    "spriteheight": [],
+    "score": 30,
+    "xpos": [],
+    "ypos": []
+    }
+    ]};
+    this.randomnumbergenerator();
+};
+gem.prototype.gemplace = function() {
+    this.gem.gems.forEach( function(eachgem){
+        for (var t = 0; t < eachgem.rgn ;t++){
+            //var swidth= window.crypto.getRandomValues(20,50,100);
+            //var sheight= window.crypto.getRandomValues(20,50,100);
+            ctx.drawImage(Resources.get(eachgem.sprite), eachgem.xpos[t], eachgem.ypos[t], eachgem.spritewidth[t], eachgem.spriteheight[t]);
+        }
+    });
+}
+gem.prototype.getRandomValue = function(min, max){
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+gem.prototype.randomnumbergenerator = function() {
+    var myobj = this;
+    this.gem.gems.forEach( function(eachgem){
+        //eachgem.rgn = ((Math.random() * 10) % 2);
+        eachgem.rgn =myobj.getRandomValue(1,3);
+        console.log(eachgem.rgn);
+        for(var i=0; i < eachgem.rgn ; i++){
+           eachgem.xpos[i]=myobj.getRandomValue(100,400);
+           eachgem.spritewidth[i]=myobj.getRandomValue(20,100);
+           eachgem.ypos[i]=myobj.getRandomValue(100,400);
+           eachgem.spriteheight[i]=myobj.getRandomValue(40,80);
+        }
+    });
+}
+// Now instantiate  objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
@@ -179,6 +211,7 @@ var allEnemies = [bug1,bug2,bug3];
 var rows = [ 65, 150, 230];
 var player_initialX = 2*100;
 var player_initialY = 5*81;
+var gemcl = new gem();
 var player = new player(player_initialX, player_initialY);
 var score = 0;
 var drawBox = function(x,y,width,height,color){
