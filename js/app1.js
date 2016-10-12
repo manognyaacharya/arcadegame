@@ -79,6 +79,9 @@ var player = function(x, y) {
     this.y = y;
     this.score = 0;
     this.lives = 5;
+        //initial score and lives are printed
+    document.getElementById("score").value = this.score;
+    document.getElementById("lives").value = this.score;
     this.sprite = "images/char-boy.png";
 };
 
@@ -98,12 +101,17 @@ player.prototype.update = function() {
     }
 };
 player.prototype.render = function() {
-    if (player.lives > 0) {
+    if (this.lives > 0 && this.score < 200) {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
         //drawBox(this.x + 16, this.y + 63, 70, 75, "yellow");
         gemcl.gemplace();
     } else {
-        document.getElementById("gameover").value = "gameover";
+        if ( this.score > 200 ) {
+            document.getElementById("gameover").value = " You "+" win!!";
+        }
+        else {
+            document.getElementById("gameover").value = "Gameover"+ " You " + " lose" ;
+        }
     }
 
 };
