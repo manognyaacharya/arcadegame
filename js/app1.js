@@ -98,18 +98,17 @@ player.prototype.render = function(){
     }
 
 };
-
 player.prototype.handleInput = function(key){
-        if( key == 'left'){
+        if( key == 'left' && player.lives > 0){
             this.x = this.x - 100;
         }
-        else if (key == 'right'){
+        else if (key == 'right' && player.lives > 0){
             this.x = this.x + 100;
         }
-        else if ( key == 'down'){
+        else if ( key == 'down'&& player.lives > 0){
             this.y = this.y + 83;
         }
-        else if (key == 'up'){
+        else if (key == 'up' && player.lives > 0){
             this.y = this.y - 83;
         }
         this.itemCollision();
@@ -234,3 +233,12 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+var playagain =function(){
+    player.lives = 5;
+    player.score = 0;
+    document.getElementById("score").value = player.score;
+    player.reset();
+    allEnemies.forEach( function(enemy){
+        enemy.positionreset();
+    })
+}

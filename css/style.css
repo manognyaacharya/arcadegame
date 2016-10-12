@@ -1,18 +1,24 @@
 body {
     text-align: center;
     max-width: 1000px;
+    margin: 0 auto;
+    font-size: 15px;
 }
 div{
     width: 505px;
+    height: 20%;
     margin: 0 auto;
     display: inline-flex;
     flex-wrap: wrap;
 }
-h1{
+h1,h2{
     width: 50%;
-
+    margin: 0 auto;
 }
 #gameout{
     width: 100%;
     text-align: center;
+}
+#playagain,h2{
+    margin-bottom: 0;
 }
