@@ -3,7 +3,7 @@
 How to play the game
 1. Use arrow keys on your keyboard to move the player.
 2. movement outside the grid is not allowed.
-3. Once you reach the final stone and you press up you will clear the level and reach your starting postion again.
+3. Once you reach the water and you press up you will clear the level and reach your starting postion again.
 4. You have 5 lives to get the highest score of 200 after which you win the game
 5. If you collide more than five times with the bug . You Lose !!
 6. Collect Gems to increase your score.
