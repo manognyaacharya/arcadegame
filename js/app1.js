@@ -32,7 +32,7 @@ Enemy.prototype.update = function(dt) {
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
-    if (player.lives > 0) {
+    if (player.lives > 0 && player.score < 200) {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
         //drawBox(this.x, this.y + 77, 100, 67, "yellow");
     } else {
@@ -81,12 +81,12 @@ var player = function(x, y) {
     this.lives = 5;
         //initial score and lives are printed
     document.getElementById("score").value = this.score;
-    document.getElementById("lives").value = this.score;
+    document.getElementById("lives").value = this.lives;
     this.sprite = "images/char-boy.png";
 };
 
 player.prototype.update = function() {
-    if (this.y < 0) {
+    if (this.y < -81) {
         this.y = 5 * 81;
         gemcl.randomnumbergenerator();
     }
@@ -116,13 +116,13 @@ player.prototype.render = function() {
 
 };
 player.prototype.handleInput = function(key) {
-    if (key == "left" && player.lives > 0) {
+    if (key == "left" && player.lives > 0 && player.score < 200) {
         this.x = this.x - 100;
-    } else if (key == "right" && player.lives > 0) {
+    } else if (key == "right" && player.lives > 0 && player.score < 200 ) {
         this.x = this.x + 100;
-    } else if (key == "down" && player.lives > 0) {
+    } else if (key == "down" && player.lives > 0 && player.score < 200 ) {
         this.y = this.y + 83;
-    } else if (key == "up" && player.lives > 0) {
+    } else if (key == "up" && player.lives > 0 && player.score < 200 ) {
         this.y = this.y - 83;
     }
     this.itemCollision();
