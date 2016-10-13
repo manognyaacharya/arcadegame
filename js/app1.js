@@ -73,7 +73,7 @@ Enemy.prototype.positionreset = function() {
 // This class requires an update(), render() and
 // a handleInput() method.
 
-var player = function(x, y) {
+var Player = function(x, y) {
     //initial location
     //postions of player can be anywere in a grid of 6x5 matrix
     this.x = x;
@@ -87,7 +87,7 @@ var player = function(x, y) {
     this.sprite = "images/char-boy.png";
 };
 
-player.prototype.update = function() {
+Player.prototype.update = function() {
     if (this.y < 0) {
         this.count++; //this accounts for renders of the player in the river
         //and once it reaches 10 then it sets players position to initial position.
@@ -109,7 +109,7 @@ player.prototype.update = function() {
     }
 };
 
-player.prototype.render = function() {
+Player.prototype.render = function() {
     if (this.lives > 0 && this.score < 200) {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
         gemcl.gemplace();
@@ -124,7 +124,7 @@ player.prototype.render = function() {
     }
 
 };
-player.prototype.handleInput = function(key) {
+Player.prototype.handleInput = function(key) {
     if (key == "left" && player.lives > 0 && player.score < 200) {
         this.x = this.x - 100;
     }
@@ -140,7 +140,7 @@ player.prototype.handleInput = function(key) {
     this.itemCollision();
 
 };
-player.prototype.itemCollision = function() {
+Player.prototype.itemCollision = function() {
     var playerBox = {
         x: player.x + 16,
         y: player.y + 63,
@@ -172,12 +172,12 @@ player.prototype.itemCollision = function() {
         }
     });
 };
-player.prototype.reset = function() {
+Player.prototype.reset = function() {
     this.x = player_initialX;
     this.y = player_initialY;
 };
 
-var gem = function() {
+var Gem = function() {
     this.gem = {
         "gems": [{
             "rgn": 0,
@@ -207,18 +207,18 @@ var gem = function() {
     };
     this.randomnumbergenerator();
 };
-gem.prototype.gemplace = function() {
+Gem.prototype.gemplace = function() {
     this.gem.gems.forEach(function(eachgem) {
         for (var t = 0; t < eachgem.rgn; t++) {
             ctx.drawImage(Resources.get(eachgem.sprite), eachgem.xpos[t], eachgem.ypos[t], eachgem.spritewidth[t], eachgem.spriteheight[t]);
         }
     });
 }
-gem.prototype.getRandomValue = function(min, max) {
+Gem.prototype.getRandomValue = function(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-gem.prototype.randomnumbergenerator = function() {
+Gem.prototype.randomnumbergenerator = function() {
     var myobj = this;
     this.gem.gems.forEach(function(eachgem) {
         eachgem.rgn = myobj.getRandomValue(1, 3);
@@ -240,8 +240,8 @@ var bug3 = new Enemy(3, 230);
 var allEnemies = [bug1, bug2, bug3];
 var player_initialX = 2 * 100;
 var player_initialY = 5 * 81;
-var gemcl = new gem();
-var player = new player(player_initialX, player_initialY);
+var gemcl = new Gem();
+var player = new Player(player_initialX, player_initialY);
 //box was drawn to implement bounding boxes correctly and check it
 /*var drawBox = function(x, y, width, height, color) {
     ctx.beginPath();
@@ -252,7 +252,7 @@ var player = new player(player_initialX, player_initialY);
 };*/
 
 // This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don"t need to modify this.
+// player.handleInput() method. You don"t need to modify this.
 document.addEventListener("keyup", function(e) {
     var allowedKeys = {
         37: "left",
