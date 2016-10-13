@@ -1,6 +1,7 @@
 // Enemies our player must avoid
 "use strict";
 var Enemy = function(x, y) {
+    "use strict";
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
@@ -18,6 +19,7 @@ var Enemy = function(x, y) {
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
+    "use strict";
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
@@ -33,6 +35,7 @@ Enemy.prototype.update = function(dt) {
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
+    "use strict";
     if (player.lives > 0 && player.score < 200) {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
         //drawBox(this.x, this.y + 77, 100, 67, "yellow");
@@ -43,6 +46,7 @@ Enemy.prototype.render = function() {
 
 };
 Enemy.prototype.detectCollision = function() {
+    "use strict";
     var enemyBox = {
         x: this.x,
         y: this.y + 77,
@@ -67,6 +71,7 @@ Enemy.prototype.detectCollision = function() {
     }
 };
 Enemy.prototype.positionreset = function() {
+    "use strict";
     this.x = 0;
 };
 
@@ -75,6 +80,7 @@ Enemy.prototype.positionreset = function() {
 // a handleInput() method.
 
 var Player = function(x, y) {
+    "use strict";
     //initial location
     //postions of player can be anywere in a grid of 6x5 matrix
     this.x = x;
@@ -89,6 +95,7 @@ var Player = function(x, y) {
 };
 
 Player.prototype.update = function() {
+    "use strict";
     if (this.y < 0) {
         this.count++; //this accounts for renders of the player in the river
         //and once it reaches 10 then it sets players position to initial position.
@@ -111,6 +118,7 @@ Player.prototype.update = function() {
 };
 
 Player.prototype.render = function() {
+    "use strict";
     if (this.lives > 0 && this.score < 200) {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
         gemcl.gemplace();
@@ -126,6 +134,7 @@ Player.prototype.render = function() {
 
 };
 Player.prototype.handleInput = function(key) {
+    "use strict";
     if (key == "left" && player.lives > 0 && player.score < 200) {
         this.x = this.x - 100;
     }
@@ -142,6 +151,7 @@ Player.prototype.handleInput = function(key) {
 
 };
 Player.prototype.itemCollision = function() {
+    "use strict";
     var playerBox = {
         x: this.x + 16,
         y: this.y + 63,
@@ -151,6 +161,7 @@ Player.prototype.itemCollision = function() {
     //three gemboxes for three category of gems
     var myobj = this;
     gemcl.gem.gems.forEach(function(eachgem) {
+        "use strict";
         for (var i = 0; i < eachgem.rgn; i++) {
             //orginal gem height is 171 ie image height - blank space on top which is 33.33% of 171
             var gemBox = {
@@ -174,11 +185,13 @@ Player.prototype.itemCollision = function() {
     });
 };
 Player.prototype.reset = function() {
+    "use strict";
     this.x = player_initialX;
     this.y = player_initialY;
 };
 
 var Gem = function() {
+    "use strict";
     this.gem = {
         "gems": [{
             "rgn": 0,
@@ -209,6 +222,7 @@ var Gem = function() {
     this.randomnumbergenerator();
 };
 Gem.prototype.gemplace = function() {
+    "use strict";
     this.gem.gems.forEach(function(eachgem) {
         for (var t = 0; t < eachgem.rgn; t++) {
             ctx.drawImage(Resources.get(eachgem.sprite), eachgem.xpos[t], eachgem.ypos[t], eachgem.spritewidth[t], eachgem.spriteheight[t]);
@@ -216,10 +230,12 @@ Gem.prototype.gemplace = function() {
     });
 }
 Gem.prototype.getRandomValue = function(min, max) {
+    "use strict";
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 Gem.prototype.randomnumbergenerator = function() {
+    "use strict";
     var myobj = this;
     this.gem.gems.forEach(function(eachgem) {
         eachgem.rgn = myobj.getRandomValue(1, 3);
@@ -255,6 +271,7 @@ var player = new Player(player_initialX, player_initialY);
 // This listens for key presses and sends the keys to your
 // player.handleInput() method. You don"t need to modify this.
 document.addEventListener("keyup", function(e) {
+    "use strict";
     var allowedKeys = {
         37: "left",
         38: "up",
@@ -266,6 +283,7 @@ document.addEventListener("keyup", function(e) {
 });
 //this works on play again button to reset lives scores and position and enemy positions
 var playagain = function() {
+    "use strict";
     player.lives = 5;
     player.score = 0;
     document.getElementById("score").value = player.score;
