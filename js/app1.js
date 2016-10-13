@@ -1,4 +1,5 @@
 // Enemies our player must avoid
+"use strict";
 var Enemy = function(x, y) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
@@ -142,8 +143,8 @@ Player.prototype.handleInput = function(key) {
 };
 Player.prototype.itemCollision = function() {
     var playerBox = {
-        x: player.x + 16,
-        y: player.y + 63,
+        x: this.x + 16,
+        y: this.y + 63,
         width: 70,
         height: 75
     };
@@ -166,7 +167,7 @@ Player.prototype.itemCollision = function() {
                 eachgem.xpos[i] = 600;
                 eachgem.ypos[i] = 600;
                 //console.log("gem collision");
-                document.getElementById("score").value = player.score;
+                document.getElementById("score").value = myobj.score;
 
             }
         }
