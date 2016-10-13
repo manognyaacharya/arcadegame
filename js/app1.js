@@ -42,7 +42,6 @@ Enemy.prototype.render = function() {
 
 };
 Enemy.prototype.detectCollision = function() {
-    //console.log("inside collision function");
     var enemyBox = {
         x: this.x,
         y: this.y + 77,
@@ -55,10 +54,12 @@ Enemy.prototype.detectCollision = function() {
         width: 70,
         height: 75
     };
-    //console.log(enemyBox,playerBox);
-    if (enemyBox.x < playerBox.x + playerBox.width && enemyBox.x + enemyBox.width > playerBox.x && enemyBox.y < playerBox.y + playerBox.height && enemyBox.height + enemyBox.y > playerBox.y) {
+    if (enemyBox.x < playerBox.x + playerBox.width
+        && enemyBox.x + enemyBox.width > playerBox.x
+        && enemyBox.y < playerBox.y + playerBox.height
+        && enemyBox.height + enemyBox.y > playerBox.y) {
         this.positionreset();
-        console.log("collision");
+        //console.log("collision");
         player.lives--;
         document.getElementById("lives").value = player.lives;
         player.reset();
@@ -79,16 +80,23 @@ var player = function(x, y) {
     this.y = y;
     this.score = 0;
     this.lives = 5;
-        //initial score and lives are printed
+    this.count = 0;
+    //initial score and lives are printed
     document.getElementById("score").value = this.score;
     document.getElementById("lives").value = this.lives;
     this.sprite = "images/char-boy.png";
 };
 
 player.prototype.update = function() {
-    if (this.y < -81) {
-        this.y = 5 * 81;
-        gemcl.randomnumbergenerator();
+    if (this.y < 0) {
+        this.count++; //this accounts for renders of the player in the river
+        //and once it reaches 10 then it sets players position to initial position.
+        if (this.count > 10) {
+            this.counnt = 0;
+            this.y = 5 * 81;
+            //on reaching start postion again resetting the number of gems
+            gemcl.randomnumbergenerator();
+        }
     }
     if (this.y > 6 * 81) {
         this.y = 5 * 81;
@@ -100,17 +108,18 @@ player.prototype.update = function() {
         this.x = 0;
     }
 };
+
 player.prototype.render = function() {
     if (this.lives > 0 && this.score < 200) {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-        //drawBox(this.x + 16, this.y + 63, 70, 75, "yellow");
         gemcl.gemplace();
-    } else {
-        if ( this.score > 200 ) {
-            document.getElementById("gameover").value = " You "+" win!!";
+    }
+    else {
+        if (this.score > 200) {
+            document.getElementById("gameover").value = " You " + " win!!";
         }
         else {
-            document.getElementById("gameover").value = "Gameover"+ " You " + " lose" ;
+            document.getElementById("gameover").value = "Gameover" + " You " + " lose";
         }
     }
 
@@ -118,11 +127,14 @@ player.prototype.render = function() {
 player.prototype.handleInput = function(key) {
     if (key == "left" && player.lives > 0 && player.score < 200) {
         this.x = this.x - 100;
-    } else if (key == "right" && player.lives > 0 && player.score < 200 ) {
+    }
+    else if (key == "right" && player.lives > 0 && player.score < 200) {
         this.x = this.x + 100;
-    } else if (key == "down" && player.lives > 0 && player.score < 200 ) {
+    }
+    else if (key == "down" && player.lives > 0 && player.score < 200) {
         this.y = this.y + 83;
-    } else if (key == "up" && player.lives > 0 && player.score < 200 ) {
+    }
+    else if (key == "up" && player.lives > 0 && player.score < 200) {
         this.y = this.y - 83;
     }
     this.itemCollision();
@@ -146,17 +158,19 @@ player.prototype.itemCollision = function() {
                 width: eachgem.spritewidth[i],
                 height: eachgem.spriteheight[i] - 0.33 * eachgem.spriteheight[i]
             };
-            if (gemBox.x < playerBox.x + playerBox.width && gemBox.x + gemBox.width > playerBox.x && gemBox.y < playerBox.y + playerBox.height && gemBox.height + gemBox.y > playerBox.y) {
+            if (gemBox.x < playerBox.x + playerBox.width
+                && gemBox.x + gemBox.width > playerBox.x
+                && gemBox.y < playerBox.y + playerBox.height
+                && gemBox.height + gemBox.y > playerBox.y) {
                 myobj.score = myobj.score + eachgem.score;
                 eachgem.xpos[i] = 600;
                 eachgem.ypos[i] = 600;
-                console.log("gem collision");
+                //console.log("gem collision");
                 document.getElementById("score").value = player.score;
 
             }
         }
     });
-    //console.log(myobj.score);
 };
 player.prototype.reset = function() {
     this.x = player_initialX;
@@ -170,7 +184,6 @@ var gem = function() {
             "sprite": "images/Gem-Orange.png",
             "spritewidth": [],
             "spriteheight": [],
-            "gemrows": [65, 150, 230],
             "score": 10,
             "xpos": [],
             "ypos": []

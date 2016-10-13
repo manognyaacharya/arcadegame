@@ -4,21 +4,25 @@ body {
     margin: 0 auto;
     font-size: 15px;
 }
-div{
+
+div {
     width: 505px;
     height: 20%;
     margin: 0 auto;
     display: inline-flex;
     flex-wrap: wrap;
 }
-h1,h2{
+
+h1, h2 {
     width: 50%;
     margin: 0 auto;
 }
-#gameout{
+
+#gameout {
     width: 100%;
     text-align: center;
 }
-#playagain,h2{
+
+#playagain, h2 {
     margin-bottom: 0;
 }
