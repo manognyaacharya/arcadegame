@@ -38,7 +38,6 @@ Enemy.prototype.render = function() {
     "use strict";
     if (player.lives > 0 && player.score < 200) {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-        //drawBox(this.x, this.y + 77, 100, 67, "yellow");
     } else {
         document.getElementById("score").value = player.score;
 
@@ -64,7 +63,6 @@ Enemy.prototype.detectCollision = function() {
         && enemyBox.y < playerBox.y + playerBox.height
         && enemyBox.height + enemyBox.y > playerBox.y) {
         this.positionreset();
-        //console.log("collision");
         player.lives--;
         document.getElementById("lives").value = player.lives;
         player.reset();
@@ -177,7 +175,6 @@ Player.prototype.itemCollision = function() {
                 myobj.score = myobj.score + eachgem.score;
                 eachgem.xpos[i] = 600;
                 eachgem.ypos[i] = 600;
-                //console.log("gem collision");
                 document.getElementById("score").value = myobj.score;
 
             }
@@ -259,14 +256,6 @@ var player_initialX = 2 * 100;
 var player_initialY = 5 * 81;
 var gemcl = new Gem();
 var player = new Player(player_initialX, player_initialY);
-//box was drawn to implement bounding boxes correctly and check it
-/*var drawBox = function(x, y, width, height, color) {
-    ctx.beginPath();
-    ctx.rect(x, y, width, height);
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = color;
-    ctx.stroke();
-};*/
 
 // This listens for key presses and sends the keys to your
 // player.handleInput() method. You don"t need to modify this.
